@@ -890,12 +890,10 @@ function saveEdit() {
           localStorage.setItem('currentNote', noteId);
           loadPost(noteId, 'notes');
           loadPosts('notes');
-      }
+  }
   else {
           alert('Incorrect password. Note not saved.');
-       } 
- }
-});
+  } 
 }
 
 function backToList() {
