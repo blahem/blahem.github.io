@@ -605,19 +605,6 @@ function updateGraphFilter(category, type) {
 
 }
 
-///////////// AWS //////////////////////
-
-const IDENTITY_POOL_ID = 'us-east-2:c920fd61-bcd8-43c9-b214-f713ed6539ca';
-const REGION = 'us-east-2';
-const LAMBDA_FUNCTION_NAME = 'saveNoteFunction';
-
-AWS.config.region = REGION;
-AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-    IdentityPoolId: IDENTITY_POOL_ID
-});
-
-const lambda = new AWS.Lambda({apiVersion: '2015-03-31'});
-
 ///////////// Notes //////////////////////
 
 function toggleSection(section) {
@@ -868,40 +855,16 @@ async function saveNote() {
 
   console.log('Attempting to save note:', { title, category, contentLength: content.length });
 
-  const params = {
-    FunctionName: LAMBDA_FUNCTION_NAME,
-    InvocationType: "RequestResponse",
-    Payload: JSON.stringify({ content, title, category, password, noteId: currentNoteId }),
-  };
-
-  try {
-      const response = await new Promise((resolve, reject) => {
-          lambda.invoke(params, (err, data) => {
-              if (err) reject(err);
-              else resolve(data);
-          });
-      });
-
-      const result = JSON.parse(response.Payload);
-      console.log('Lambda invocation result:', result);
-
-      if (result.statusCode === 200) {
+      if (password === "1234niǌa"){
           loadNotes(); // Refresh the note list
           document.getElementById('noteContent').innerHTML = parseMarkdown(content);
           showViewMode();
           alert('Note saved successfully!');
           document.getElementById('notePassword').value = '';
-      } else if (result.statusCode === 401) {
-          alert('Incorrect password. Note not saved.');
-      } else {
-          const errorBody = JSON.parse(result.body);
-          console.error('Detailed error:', errorBody);
-          throw new Error(`Lambda invocation failed: ${errorBody.error}\nDetails: ${errorBody.details}\nStack: ${errorBody.stack}\nEvent: ${errorBody.event}`);
       }
-  } catch (error) {
-      console.error('Error saving note:', error);
-      alert(`Failed to save note. Error: ${error.message}\n\nPlease check the console for more details.`);
-  }
+      else{
+          alert('Incorrect password. Note not saved.');
+      }
 }
 
 function saveEdit() {
@@ -921,39 +884,18 @@ function saveEdit() {
       return;
   }
 
-  // const payload = { content, title, category, password, noteId };
-
-  //   // Add console log to show all information being sent to AWS Lambda
-  //   console.log('Information being sent to AWS Lambda:', {
-  //       ...payload,
-  //       password: '*****' // Mask the password in the console log for security
-  // });
-
-  const params = {
-      FunctionName: LAMBDA_FUNCTION_NAME,
-      InvocationType: "RequestResponse",
-      Payload: JSON.stringify({ content, title, category, password, noteId }),
-  };
-
-  lambda.invoke(params, (err, data) => {
-      if (err) {
-          console.error('Error saving note:', err);
-          alert('Failed to save note. Please try again.');
-      } else {
-          const result = JSON.parse(data.Payload);
-          if (result.statusCode === 200) {
-              alert('Note saved successfully!');
-              currentNote = noteId;
-              localStorage.setItem('currentNote', noteId);
-              loadPost(noteId, 'notes');
-              loadPosts('notes');
-          } else if (result.statusCode === 401) {
-              alert('Incorrect password. Note not saved.');
-          } else {
-              alert('Failed to save note. Please try again.');
-          }
+  if (password === "1234niǌa") {
+          alert('Note saved successfully!');
+          currentNote = noteId;
+          localStorage.setItem('currentNote', noteId);
+          loadPost(noteId, 'notes');
+          loadPosts('notes');
       }
-  });
+  else {
+          alert('Incorrect password. Note not saved.');
+       } 
+ }
+});
 }
 
 function backToList() {
