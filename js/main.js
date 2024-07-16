@@ -855,7 +855,7 @@ async function saveNote() {
 
   console.log('Attempting to save note:', { title, category, contentLength: content.length });
 
-      if (password === "1234niǌa"){
+      if (password === "1234ninja"){
           loadNotes(); // Refresh the note list
           document.getElementById('noteContent').innerHTML = parseMarkdown(content);
           showViewMode();
@@ -884,7 +884,7 @@ function saveEdit() {
       return;
   }
 
-  if (password === "1234niǌa") {
+  if (password === "1234ninja") {
           alert('Note saved successfully!');
           currentNote = noteId;
           localStorage.setItem('currentNote', noteId);
