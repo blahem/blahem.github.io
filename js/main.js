@@ -180,7 +180,7 @@ function updateActiveLink(activeSectionId) {
 }
 
 function loadBugReportForm() {
-    fetch('/external/report.php')
+    fetch('/external/report.html')
     .then(response => response.text())
     .then(html => {
         document.getElementById('modal-content').innerHTML = html;
