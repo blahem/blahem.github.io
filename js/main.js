@@ -981,3 +981,4 @@ function addTabCapture(textareaId) {
       console.error(`Textarea with id ${textareaId} not found`);
   }
 }
+
